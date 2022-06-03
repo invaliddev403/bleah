@@ -42,13 +42,18 @@ assigned_numbers_add( "2f7cabce-808d-411f-9a0c-bb92ba96c102", 'Entity Update' )
 assigned_numbers_add( "c6b2f38c-23ab-46d8-a6ab-a3a870bbd5d7", 'Entity Attribute' )
 
 def is_mostly_printable(s):
-    tot = len(s)
+    #print("starting is_mostly_printable")
+    #print('s:', s)
+    #print('s:',s.decode("utf-8") )
+    w = s.decode("utf-8")
+    tot = len(w)
+    #print('tot:',tot)
     if tot == 0:
         return False
 
     pr  = 0
 
-    for c in s:
+    for c in w:
         if c in string.printable:
             pr += 1
 
@@ -287,6 +292,45 @@ def deserialize_peripheral_privacy_flag( raw ):
 def deserialize_char( char, props ):
     # INDICATE makes the read operation hang
     if 'READ' in props and 'INDICATE' not in props:
+        #print(props)
+        #raw = char.read()
+        #print(raw)
+        #print("start")
+        raw = char.read()
+        #print(raw)
+        #print('entering if statements')
+        #print('char.uuid:',char.uuid)
+        #print('AssignedNumbers.peripheral_preferred_connection_parameters:', AssignedNumbers.peripheral_preferred_connection_parameters)
+        #print('AssignedNumbers.appearance:', AssignedNumbers.appearance)
+        #print('AssignedNumbers.pnp_id:', AssignedNumbers.pnp_id)
+        #print('AssignedNumbers.peripheral_privacy_flag:', AssignedNumbers.peripheral_privacy_flag)
+
+
+        #if char.uuid == AssignedNumbers.peripheral_preferred_connection_parameters:
+        #    print("deserialize_connection_params")
+        #    string = deserialize_connection_params(raw)
+
+        #elif char.uuid == AssignedNumbers.appearance:
+        #    print("deserialize_appearance")
+        #    string = deserialize_appearance(raw)
+
+        #elif char.uuid == AssignedNumbers.pnp_id:
+        #    print("deserialize_pnp_id")
+        #    string = deserialize_pnp_id(raw)
+
+        #elif char.uuid == AssignedNumbers.peripheral_privacy_flag:
+        #    print("deserialize_peripheral_privacy_flag")
+        #    string = deserialize_peripheral_privacy_flag(raw)
+
+        #elif is_mostly_printable(raw):
+        #    print('mostly printable')
+        #    try:
+        #        print("yellow decode")
+        #        string = yellow(repr(raw.decode('utf-8')))
+        #    except:
+        #        print("yellow raw")
+        #        string = yellow(repr(raw))
+
         try:
             raw = char.read()
 
@@ -312,6 +356,7 @@ def deserialize_char( char, props ):
                 string = repr(raw)
 
         except Exception as e:
+            #print('raw',raw)
             string = red( str(e) )
     else:
         string = ''
@@ -328,6 +373,7 @@ def enumerate_device_properties(dev,args):
     for s in services:
         sys.stdout.write('.')
         sys.stdout.flush()
+        #print(s)
 
         if s.hndStart == s.hndEnd:
             continue
@@ -336,10 +382,16 @@ def enumerate_device_properties(dev,args):
 
         chars = s.getCharacteristics()
         for i, char in enumerate(chars):
+            #print('i:',i)
+            #print('char:',char)
             desc  = get_char_desc(char)
+            #print('desc:',desc)
             props = char.propertiesToString().replace( 'WRITE', bold('WRITE') )
+            #print('props:',props)
             hnd   = char.getHandle()
+            #print('hnd:',hnd)
             value = deserialize_char( char, props )
+            #print('value:',value)
 
             tdata.append([ "%04x" % hnd, desc, props, value ])
 

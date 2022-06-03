@@ -48,7 +48,17 @@ def do_write_ops( dev, args ):
     if char is not None:
         if "WRITE" in char.propertiesToString():
             print(green("found"))
-            print("@ Sending %d bytes ..." % len(args.data), end=' ')
+            #print('args.data:',args.data)
+            try:
+                if isinstance(args.data, str) == True:
+                    data_value = str.encode(args.data)
+                else:
+                    data_value = str.encode(args.data).hex()
+                    data_value = str.encode(data_value)
+            except:
+                data_value = args.data
+            #print('data_value',data_value)
+            print("@ Sending %d bytes ..." % len(data_value), end=' ')
             sys.stdout.flush()
 
             wwrflag=False
@@ -57,7 +67,7 @@ def do_write_ops( dev, args ):
                 wwrflag=True
 
             try:
-                char.write( args.data, wwrflag )
+                char.write( data_value, wwrflag )
                 print(green('done'))
             except Exception as e:
                 print(red( str(e) ))
