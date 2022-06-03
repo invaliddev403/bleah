@@ -1,9 +1,9 @@
 exclude *.pyc .DS_Store .gitignore MANIFEST.in
-exclude .idea
 include setup.py
 include distribute_setup.py
 include README.md
 include LICENSE
+recursive-exclude .idea
 recursive-include bin *
 recursive-include bleah *.py
 recursive-include bleah *.dat
