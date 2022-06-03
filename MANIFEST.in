@@ -1,4 +1,5 @@
 exclude *.pyc .DS_Store .gitignore MANIFEST.in
+exclude .idea
 include setup.py
 include distribute_setup.py
 include README.md
