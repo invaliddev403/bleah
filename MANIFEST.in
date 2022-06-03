@@ -3,7 +3,7 @@ include setup.py
 include distribute_setup.py
 include README.md
 include LICENSE
-recursive-exclude .idea
+prune .idea
 recursive-include bin *
 recursive-include bleah *.py
 recursive-include bleah *.dat
